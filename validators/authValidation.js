@@ -28,6 +28,20 @@ const userValidator = {
       return res.status(400).json({ error, msg: "something went wrong" });
     }
   },
+  login: (req, res, next) => {
+    const body = req.body;
+    const schema = Joi.object({
+      email: Joi.string().email().required(),
+      password: Joi.string()
+        .pattern(new RegExp(`^(?=.*\\d)(?=.*\\d)[\\s\\S]{5,}$`))
+        .required(),
+    });
+    const { error, value } = schema.validate(body);
+      if (error) {
+        return res.status(400).json({ error, msg: "something went wrong" });
+      }
+      next();
+  },
 };
 
 export default userValidator;
