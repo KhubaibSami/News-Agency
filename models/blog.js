@@ -10,5 +10,5 @@ const blogSchema = new Schema(
   },
   { timestamps: true }
 );
-
+  
 export default model("blog", blogSchema, "blogs");

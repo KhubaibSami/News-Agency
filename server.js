@@ -1,4 +1,3 @@
-import "dotenv/config";
 import express from "express";
 import dbconnect from "./database/index.js";
 import PORT from "./config/index.js";
