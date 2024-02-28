@@ -134,13 +134,13 @@ const authController = {
     const { refreshToken } = req.cookies;
     // delete token
     try {
-      await refreshToken.deleteOne({ token: refreshToken });
+      await tokenModel.deleteOne({ token: refreshToken });
     } catch (error) {
       return res.status(500).json({ message: "error in logout controller" });
     }
     //  delete cookies
-    res.clearCookies("accessToken");
-    res.clearCookies("refreshToken");
+     res.clearCookie("accessToken");
+     res.clearCookie("refreshToken");
     //response
     return res.status(200).json({ user: null, auth: false });
   },
