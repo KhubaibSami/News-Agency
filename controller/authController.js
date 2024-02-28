@@ -139,10 +139,61 @@ const authController = {
       return res.status(500).json({ message: "error in logout controller" });
     }
     //  delete cookies
-     res.clearCookie("accessToken");
-     res.clearCookie("refreshToken");
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
     //response
     return res.status(200).json({ user: null, auth: false });
+  },
+  refresh: async (req, res) => {
+    const originalRefreshToken = req.cookies.refreshToken;
+    // get token from cookies
+    let id;
+    try {
+      id = jwtservices.verifyRefreshToken(originalRefreshToken)._id;
+      if(!id){
+      return res.status(401).json({ message: "Unauthorized user" });
+      }
+    } catch (error) {
+      console.log(error);
+      return res.status(401).json({ message: "bad happen in refresh token" });
+    }
+    // verify refreshToken
+    try {
+      const match = tokenModel.findOne({
+        _id: id,
+        token: originalRefreshToken,
+      });
+      if (!match) {
+        return res.status(401).json({ message: "Unauthorized user" });
+      }
+    } catch (error) {
+      console.log(error);
+      return res
+        .status(401)
+        .json({ message: "bad happen in refresh matching token" });
+    }
+    // generate refresh token
+    try {
+      const accessToken = jwtservices.signAccessToken({ _id: id }, "30m");
+      const refreshToken = jwtservices.signrefreshToken({ _id: id }, "60m");
+
+      await tokenModel.updateOne({ _id: id }, { token: refreshToken });
+      res.cookie("accessToken", accessToken, {
+        maxAge: 1000 * 60 * 60 * 24,
+        httpOnly: true,
+      });
+      res.cookie("refreshToken", refreshToken, {
+        maxAge: 1000 * 60 * 60 * 24,
+        httpOnly: true,
+      });
+    } catch (error) {
+      return res
+        .status(401)
+        .json({ message: "bad happen in refresh generating token" });
+    }
+    const user = await UserModel.findOne({ _id: id });
+    const userDto = new UserDTO(user);
+    return res.status(200).json({ user: userDto, auth: true });
   },
 };
 
