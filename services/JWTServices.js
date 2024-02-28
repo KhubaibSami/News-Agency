@@ -1,18 +1,18 @@
-import { jwt } from "jsonwebtoken";
+import  jwt  from "jsonwebtoken";
 import { REFRESH_TOKEN_SECRET } from "../config/index.js";
 import { ACCESS_TOKEN_SECRET } from "../config/index.js";
-import token from "../models/token.js";
+import tokenSchema from "../models/token.js";
 
 class jwtservices {
   //sign access token
   static signAccessToken(payload, experyTime) {
-    return jwt.sign(payload, ACCESS_TOKEN_SECRET, secret, {
+    return jwt.sign(payload, ACCESS_TOKEN_SECRET,  {
       expiresIn: experyTime,
     });
   }
   // sign refresh token
   static signrefreshToken(payload, experyTime) {
-    return jwt.sign(payload, REFRESH_TOKEN_SECRET, secret, {
+    return jwt.sign(payload, REFRESH_TOKEN_SECRET,  {
       expiresIn: experyTime,
     });
   }
