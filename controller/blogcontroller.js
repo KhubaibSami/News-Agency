@@ -7,11 +7,13 @@ const blogController = {
   create: async (req, res) => {
     const { title, author, photo, content } = req.body;
     // photo to buffer
+    //read as buffer
     const buffer = Buffer.from(
-      photo.replace(/^data:image\/(png\jpeg\jpg);base64,/, ""),
+      photo.replace(/^data:image\/(png|jpg|jpeg);base64,/, ""),
       "base64"
     );
-    // buffro to random name
+
+    //allot a random name
     const imagePath = `${Date.now()}-${author}.png`;
     //save localy
     try {
@@ -42,8 +44,34 @@ const blogController = {
       .status(200)
       .json({ message: "blog created successfully", blog: blogDto });
   },
-  getAll: async (req, res) => {},
-  getById: async (req, res) => {},
+  getAll: async (req, res) => {
+    try {
+      const blogs = await blog.find({});
+      const blogsDto = [];
+      for (let i = 0; i < blog.length; i++) {
+        const dto = new blogDTO(blogs[i]);
+        blogsDto.push(dto);
+      }
+      return res.status(200).json({ blogs: blogsDto });
+    } catch (error) {
+      return res
+        .status(400)
+        .json({ message: "bad happen in all read blog controller" });
+    }
+  },
+  getById: async (req, res) => {
+    let blog;
+    try {
+      const id = req.params;
+      blog = await blog.FindOne({ _id: id });
+    } catch (error) {
+      return res
+        .status(400)
+        .json({ message: "bad happen in id read blog controller" });
+    }
+    const blogDto = new blogDTO(blog);
+    return res.status(200).json({ blog: blogDto });
+  },
   update: async (req, res) => {},
   delete: async (req, res) => {},
 };

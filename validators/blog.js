@@ -24,6 +24,24 @@ const blogValidation = {
       return res.status(400).json({ msg: "something went wrong in validator" });
     }
   },
+  getId: async (req, res, next) => {
+    try {
+      const body = req.params;
+      const schema = Joi.object({
+        id: Joi.string().regex(mongodbIdPattern).required(),
+      });
+      const { error, value } = schema.validate(body);
+      if (error) {
+        return res
+          .status(400)
+          .json({ msg: "something went wrong in validation" });
+      }
+      next();
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json({ msg: "something went wrong in validator" });
+    }
+  },
 };
 
 export default blogValidation;

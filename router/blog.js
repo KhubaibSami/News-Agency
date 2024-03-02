@@ -7,7 +7,7 @@ const blogRouter = Router();
 
 blogRouter.post("/create", auth, blogValidation.create, blogController.create);
 blogRouter.get("/all", auth, blogController.getAll);
-blogRouter.get("/:id", auth, blogController.getById);
+blogRouter.get("/:id", auth, blogValidation.getId, blogController.getById);
 blogRouter.put("/update", auth, blogController.update);
 blogRouter.delete("/:id", auth, blogController.delete);
 
