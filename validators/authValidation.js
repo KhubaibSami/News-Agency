@@ -2,9 +2,9 @@ import Joi from "joi";
 
 const userValidator = {
   create: (req, res, next) => {
-    try {
+    try {   
       const body = req.body;
-      const schema = Joi.object({
+  const schema = Joi.object({
         userName: Joi.string().min(3).max(10).required(),
         name: Joi.string().min(3).max(10).required(),
         email: Joi.string().email().required(),
