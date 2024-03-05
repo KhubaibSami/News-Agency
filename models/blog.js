@@ -5,11 +5,11 @@ const blogSchema = new Schema(
   {
     title: { type: String, required: true },
     content: { type: String, required: true },
-    photoPath: { type: String, required: true },
-    author: { type: mongoose.SchemaTypes.ObjectId, ref: "users" },
+    // photoPath: { type: String, required: true },
+    author: { type: mongoose.SchemaTypes.ObjectId, ref: "User" },
   },
   { timestamps: true }
 );
 
-const blogModel = model("blog", blogSchema, "blogs");
+const blogModel = model("Blog", blogSchema, "blogs");
 export default blogModel;

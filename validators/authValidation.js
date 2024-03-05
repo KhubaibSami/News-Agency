@@ -4,7 +4,7 @@ const userValidator = {
   create: (req, res, next) => {
     try {   
       const body = req.body;
-  const schema = Joi.object({
+      const schema = Joi.object({
         userName: Joi.string().min(3).max(10).required(),
         name: Joi.string().min(3).max(10).required(),
         email: Joi.string().email().required(),
@@ -25,11 +25,14 @@ const userValidator = {
       }
       next();
     } catch (error) {
-      return res.status(400).json({ error, msg: "something went wrong" });
+      return res.status(400).json({ error, msg: "something went wrong in auth create validator" });
     }
   },
   login: (req, res, next) => {
-    const body = req.body;
+    try {
+      
+  
+    const body = req.params;
     const schema = Joi.object({
       email: Joi.string().email().required(),
       password: Joi.string()
@@ -41,6 +44,10 @@ const userValidator = {
         return res.status(400).json({ error, msg: "something went wrong" });
       }
       next();
+    } catch (error) {
+      return res.status(400).json({ error, msg: "something went wrong in auth login validator" });
+      
+    }
   },
 };
 

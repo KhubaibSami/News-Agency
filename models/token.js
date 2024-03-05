@@ -5,7 +5,7 @@ const { Schema, model } = mongoose;
 const tokenSchema = new Schema(
   {
     token: { type: String, required: true },
-    author: { type: mongoose.SchemaTypes.ObjectId, ref: "users" },
+    author: { type: mongoose.SchemaTypes.ObjectId, ref: "User" },
   },
   { timestamps: true }
 );

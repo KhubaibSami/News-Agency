@@ -155,6 +155,9 @@ const authController = {
       }
     } catch (error) {
       console.log(error);
+      if (error instanceof jwt.TokenExpiredError) {
+        return res.status(401).json({ message: "refresh token expired" });
+      }
       return res.status(401).json({ message: "bad happen in refresh token" });
     }
     // verify refreshToken
@@ -174,8 +177,8 @@ const authController = {
     }
     // generate refresh token
     try {
-      const accessToken = jwtservices.signAccessToken({ _id: id }, "30m");
-      const refreshToken = jwtservices.signrefreshToken({ _id: id }, "60m");
+      const accessToken = jwtservices.signAccessToken({ _id: id }, "3m");
+      const refreshToken = jwtservices.signrefreshToken({ _id: id }, "3m");
 
       await tokenModel.updateOne({ _id: id }, { token: refreshToken });
       res.cookie("accessToken", accessToken, {
